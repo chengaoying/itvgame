@@ -15,7 +15,7 @@ public class GameRecord {
 	private int scores;			/*游戏积分*/
 	private String remark = "";
 	private String time;
-	private byte []data;
+	private byte []data;        /*保存游戏其他相关数据*/
 
 	public String getRemark() {
 		return remark;

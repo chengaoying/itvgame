@@ -16,35 +16,20 @@ public class Configurations {
 	public static final String TAG_BACK = "back";
 	public static final String TAG_CANCEL = "cancel";
 	public static final String TAG_NONSUPPORT = "nonsupport";
-	public static final String TAG_TELCOMSH = "telcomsh";			/*上海电信*/
-	public static final String TAG_TELCOMGD = "telcomgd";			/*广东电信*/
-	public static final String TAG_TELCOMJS = "telcomjs";			/*江苏电信*/
-	public static final String TAG_TELCOMAH = "telcomah";			/*安徽电信*/
-	public static final String TAG_TELCOMFJ = "telcomfj";			/*福建电信*/
-	public static final String TAG_TELCOMHN = "telcomhn";			/*湖南电信*/
-	public static final String TAG_TIANWEISZ = "tianweisz";			/*深圳天威*/
-	public static final String TAG_TELCOMCOMMON = "telcomCommon";	/*其他电信*/
-
-	public static final String TAG_OHYEAH = "ohyeah";				/*欧耶平台*/
-	public static final String TAG_WINSIDE = "winside";				/*掌世界平台*/
-	public static final String TAG_THE9 = "the9";					/*九城平台*/
-	public static final String TAG_DIJOY = "dijoy";					/*鼎亿平台*/
-	public static final String TAG_SHENGYI = "shengyi";				/*盛翼平台*/
 	
-	public static final short Abs_Coords_X = 0, Abs_Coords_Y = 0;
+	public static final String TAG_TELCOMSH = "telcomsh";			/*上海电信*/
+	public static final String TAG_OHYEAH = "ohyeah";				/*欧耶平台*/
 	
 	private static Configurations instance = new Configurations();
 	private static boolean success;
 	private static String errorMessage;
 	private String telcomOperators;
 	private String serviceProvider;
-	private String favorWay;
 	private String rechargeWay;
 	private String subscribeFocus;
 	private String rechargeCmd;
 	private String price;
     private String appName;
-   // private String dijoyPayKey;
 	
 	public static Configurations loadConfigurations() {
 		return loadConfigurations(DEFAULT_CONF_PATH);
@@ -67,13 +52,11 @@ public class Configurations {
 	private void setProperties(Properties props) {
 		telcomOperators = props.get("telcomOperators");
 		serviceProvider = props.get("serviceProvider");
-		favorWay = props.get("favorWay");
 		rechargeWay = props.get("rechargeWay");
 		subscribeFocus = props.get("subscribeFocus");
 		rechargeCmd = props.get("rechargeCmd");
 		price = props.get("price");
         appName = props.get("appName");
-        //dijoyPayKey = props.get("payKey");
 	}
 	
 	public static Configurations getInstance() {
@@ -100,56 +83,8 @@ public class Configurations {
 		return TAG_TELCOMSH.equals(telcomOperators);
 	}
 	
-	public boolean isTelcomOperatorsTelcomhn() {
-		return TAG_TELCOMHN.equals(telcomOperators);
-	}
-	
-	public boolean isTelcomOperatorsTelcomgd() {
-		return TAG_TELCOMGD.equals(telcomOperators);
-	}
-	
-	public boolean isTelcomOperatorsTelcomfj() {
-		return TAG_TELCOMFJ.equals(telcomOperators);
-	}
-	
-	public boolean isTelcomOperatorsCommon() {
-		return TAG_TELCOMCOMMON.equals(telcomOperators);
-	}
-	
-	public boolean isTelcomOperatorsTianweiSZ() {
-		return TAG_TIANWEISZ.equals(telcomOperators);
-	}
-	
 	public boolean isServiceProviderOhyeah() {
 		return TAG_OHYEAH.equals(serviceProvider);
-	}
-	
-	public boolean isServiceProviderWinside() {
-		return TAG_WINSIDE.equals(serviceProvider);
-	}
-	
-	public boolean isServiceProviderThe9() {
-		return TAG_THE9.equals(serviceProvider);
-	}
-	
-	public boolean isServiceProviderDijoy() {
-		return TAG_DIJOY.equals(serviceProvider);
-	}
-	
-	public boolean isServiceProviderShengYi() {
-		return TAG_SHENGYI.equals(serviceProvider);
-	}
-	
-	public String getFavorWay() {
-		return favorWay;
-	}
-	
-	public boolean isFavorWayNonsupport() {
-		return TAG_NONSUPPORT.equals(favorWay);
-	}
-	
-	public boolean isFavorWayTelcomgd() {
-		return TAG_TELCOMGD.equals(favorWay);
 	}
 	
 	public String getSubscribeFocus() {
@@ -162,14 +97,6 @@ public class Configurations {
 	
 	public String getRechargeWay() {
 		return rechargeWay;
-	}
-	
-	public boolean isRechargeWayTelcomgd() {
-		return TAG_TELCOMGD.equals(rechargeWay);
-	}
-	
-	public boolean isRechargeWayTelcomfj() {
-		return TAG_TELCOMFJ.equals(rechargeWay);
 	}
 	
 	public boolean isRechargeWayCommon() {
@@ -202,13 +129,9 @@ public class Configurations {
     public String getAppName() {
         return appName;
     }
-    
-   /* public String getDijoyPayKey(){
-    	return dijoyPayKey;
-    }*/
 	
 	public String toString() {
-		return telcomOperators+";"+serviceProvider+";"+favorWay
+		return telcomOperators+";"+serviceProvider
 				+";"+rechargeWay+";"+subscribeFocus+";"+rechargeCmd+";"+price;
 	}
 }

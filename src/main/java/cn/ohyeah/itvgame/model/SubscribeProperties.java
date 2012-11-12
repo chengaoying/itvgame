@@ -113,13 +113,13 @@ public class SubscribeProperties {
 	}
 
 	public void print() {
-		System.out.println("supportSubscribe: "+supportSubscribe);
+		//System.out.println("supportSubscribe: "+supportSubscribe);
 		System.out.println("subscribeAmountUnit: "+subscribeAmountUnit);
 		System.out.println("cashToAmountRatio: "+subscribeCashToAmountRatio);
-		System.out.println("supportSubscribeByPoints: "+supportSubscribeByPoints);
-		System.out.println("pointsUnit: "+pointsUnit);
-		System.out.println("availablePoints: "+availablePoints);
-		System.out.println("cashToPointsRatio: "+cashToPointsRatio);
+		//System.out.println("supportSubscribeByPoints: "+supportSubscribeByPoints);
+		//System.out.println("pointsUnit: "+pointsUnit);
+		//System.out.println("availablePoints: "+availablePoints);
+		//System.out.println("cashToPointsRatio: "+cashToPointsRatio);
 		System.out.println("supportRecharge: "+supportRecharge);
 		System.out.println("expendAmountUnit: "+expendAmountUnit);
 		System.out.println("expendCashToAmountRatio: "+expendCashToAmountRatio);
