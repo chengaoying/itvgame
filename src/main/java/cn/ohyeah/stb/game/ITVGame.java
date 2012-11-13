@@ -184,7 +184,7 @@ public class ITVGame {
 	 * @param amount ½ð¶î
 	 * @param remark ÃèÊö
 	 */
-	public void recharge(int amount, String remark){
+	public static void recharge(int amount, String remark){
 		if(loginSuccessful){
 			gameService.recharge(amount, remark);
 		}else{
@@ -253,11 +253,11 @@ public class ITVGame {
 		return balance;
 	}
 	
-	public static String getRechargeCommand() {
+	private static String getRechargeCommand() {
 		return Configurations.getInstance().getRechargeCmd();
 	}
 	
-	public static boolean isSupportRecharge() {
+	private static boolean isSupportRecharge() {
 		return subProps.isSupportRecharge();
 	}
 	
@@ -269,19 +269,19 @@ public class ITVGame {
 		return subProps.getRechargeRatio();
 	}
 	
-	public static boolean isSupportSubscribe() {
+	private static boolean isSupportSubscribe() {
 		return subProps.isSupportSubscribe();
 	}
 	
-	public static String getSubscribeAmountUnit() {
+	private static String getSubscribeAmountUnit() {
 		return subProps.getSubscribeAmountUnit();
 	}
 	
-	public static int getSubscribeCashToAmountRatio() {
+	private static int getSubscribeCashToAmountRatio() {
 		return subProps.getSubscribeCashToAmountRatio();
 	}
 	
-	public static int getExpendCashToAmountRatio() {
+	private static int getExpendCashToAmountRatio() {
 		return subProps.getExpendCashToAmountRatio();
 	}
 	
@@ -295,19 +295,19 @@ public class ITVGame {
 		return new java.util.Date(loginTime.getTime()+pastMillis);
 	}
 	
-	public static Authorization getAuthorization() {
+	private static Authorization getAuthorization() {
 		return auth;
 	}
 	
-	public  static int[] getRechargeAmounts() {
+	private  static int[] getRechargeAmounts() {
 		return pm.rechargeAmounts;
 	}
 	
-	public static int calcSubscribeAmount(int amount) {
+	private static int calcSubscribeAmount(int amount) {
 		return amount*getSubscribeCashToAmountRatio();
 	}
 	
-	public static int calcExpendAmount(int amount) {
+	private static int calcExpendAmount(int amount) {
 		return (short)(amount*getExpendCashToAmountRatio()/getRechargeRatio());
 	}
 	
