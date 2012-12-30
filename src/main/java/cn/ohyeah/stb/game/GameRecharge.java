@@ -9,7 +9,9 @@ import javax.microedition.midlet.MIDlet;
 import cn.ohyeah.stb.key.KeyCode;
 import cn.ohyeah.stb.key.KeyState;
 import cn.ohyeah.stb.res.ResourceManager;
+import cn.ohyeah.stb.res.UIResource;
 import cn.ohyeah.stb.ui.DrawUtil;
+import cn.ohyeah.stb.ui.PopupText;
 
 /**
  * 充值界面
@@ -24,62 +26,56 @@ public class GameRecharge extends GameCanvas implements Runnable{
 	private static short NUM_PICS = 0;
 	private static final short PIC_ID_RECHARGE_BG = NUM_PICS++;
 	private static final short PIC_ID_RECHARGE_TITLE = NUM_PICS++;
-	private static final short PIC_ID_EXCHANGE_TITLE = NUM_PICS++;
 	private static final short PIC_ID_CONFIRM_BG = NUM_PICS++;
 	private static final short PIC_ID_CHECKED = NUM_PICS++;
-	private static final short PIC_ID_UNCHECKED = NUM_PICS++;
 	private static final short PIC_ID_OK0 = NUM_PICS++;
 	private static final short PIC_ID_CANCEL0 = NUM_PICS++;
 	private static final short PIC_ID_BACK0 = NUM_PICS++;
 	private static final short PIC_ID_RECHARGE0 = NUM_PICS++;
-	private static final short PIC_ID_EXCHANGE0 = NUM_PICS++;
-	private static final short PIC_ID_PASSWORD_BG = NUM_PICS++;
+	public static final short PIC_ID_POPUP_BTN = NUM_PICS++;
+	public static final short PIC_ID_POPUP_BG = NUM_PICS++;
 	
 	private static final String[] imagePaths = {
 		"/business/recharge-bg.jpg",
 		"/business/recharge-title.png",
-		"/business/exchange-title.png",
 		"/business/confirm-bg.jpg",
 		"/business/checked.png",
-		"/business/unchecked.png",
 		"/business/ok0.png",
 		"/business/cancel0.png",
 		"/business/back0.png",
 		"/business/recharge0.png",
-		"/business/exchange0.png",
-		"/business/password-bg.png",
+		"/common/popup-btn.png",
+		"/common/popup-bg.png",
 	};
 
 	protected Graphics g;
-	protected ResourceManager resource;
+	public ResourceManager resource;
 	protected MIDlet midlet;
 	//protected KeyState keyState;
 	protected ParamManager pm;
 	protected GameService gs;
 	
 	private boolean running;
-	protected int screenWidth;
-	protected int screenHeight;
+	public int screenWidth;
+	public int screenHeight;
 	
 	private byte groupIndex;
 	private byte confirmIndex;
 	private byte amountIndex;
 	private byte state;
-	private byte subState;
-	private byte pwdGroupIndex;
-	private byte pwdBtnIndex;
 	private int rechargeAmount;
 	private int[] amountList;
 	
 	public GameRecharge(ParamManager pm, GameService gs){
 		super(false);
-		g = getGraphics();
+		g = super.getGraphics();
 		this.pm = pm;
 		this.gs = gs;
 		amountList = pm.rechargeAmounts;
 		resource = ResourceManager.createImageResourceManager(imagePaths);
 		screenWidth = getWidth();
 		screenHeight = getHeight();
+		UIResource.registerEngine(this);
 	}
 	
 	public void run() {
@@ -283,9 +279,9 @@ public class GameRecharge extends GameCanvas implements Runnable{
 		}else if (ITVGame.ks.containsAndRemove(KeyCode.OK)) {
 			if (confirmIndex == 0) {
 				String resultMsg = "";
-				/*PopupText pt = UIResource.getInstance().buildDefaultPopupText();
-				pt.setText("正在"+engineService.getRechargeCommand()+"，请稍后...");
-				pt.show(engine.getSGraphics());*/
+				PopupText pt = UIResource.getInstance().buildDefaultPopupText();
+				pt.setText("正在充值，请稍后...");
+				pt.show(g);
 				flushGraphics();
 				try {
 					gs.recharge(rechargeAmount,"");
@@ -302,14 +298,14 @@ public class GameRecharge extends GameCanvas implements Runnable{
 				}
 				finally {
 					if (gs.isServiceSuccessful()) {
-						//pt.setText(resultMsg);
-						//pt.popup();
+						pt.setText(resultMsg);
+						pt.popup();
 						clear();
 						state=STATE_SELECT_AMOUNT;
 					}
 					else {
-							//pt.setText(resultMsg);
-							//pt.popup();
+							pt.setText(resultMsg);
+							pt.popup();
 							clear();
 							state=STATE_SELECT_AMOUNT;
 					}
@@ -324,7 +320,6 @@ public class GameRecharge extends GameCanvas implements Runnable{
 
 	private void handleSelectAmount() {
 		if (ITVGame.ks.containsAndRemove(KeyCode.UP)) {
-			System.out.println("left");
 			if (groupIndex == 1){
 				if (amountIndex > 0) {
 					--amountIndex;
@@ -363,7 +358,7 @@ public class GameRecharge extends GameCanvas implements Runnable{
 				rechargeAmount = amountList[amountIndex];
 				clear();
 				state = STATE_CONFIRM;
-			}else {
+			}else if(groupIndex == 2){
 				running = false;
 			}
 		}
@@ -381,5 +376,13 @@ public class GameRecharge extends GameCanvas implements Runnable{
 	*/
 	public void clear() {
 		resource.clear();
+	}
+	
+	public KeyState getKeyState(){
+		return ITVGame.ks;
+	}
+	
+	public Graphics getGraphics(){
+		return g;
 	}
 }
