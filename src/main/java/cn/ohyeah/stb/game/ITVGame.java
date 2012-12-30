@@ -50,12 +50,12 @@ public class ITVGame {
 		/*解析参数*/
 		pm = new ParamManager(mid);
 		pm.parse();		
-		
 		gameService = new GameService(pm);
 		gameRecharge = new GameRecharge(pm,gameService);
 		
 		/*用户登入*/
 		login();		
+		ks = new KeyState();
 	}
 	
 	/**
@@ -220,8 +220,7 @@ public class ITVGame {
 	/**
 	 * 带充值界面的充值
 	 */
-	public static void rechargeUI(KeyState keystate){
-		ks = keystate;
+	public static void rechargeUI(){
 		new Thread(gameRecharge).start();
 	}
 	

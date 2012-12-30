@@ -304,10 +304,10 @@ public class GameRecharge extends GameCanvas implements Runnable{
 						state=STATE_SELECT_AMOUNT;
 					}
 					else {
-							pt.setText(resultMsg);
-							pt.popup();
-							clear();
-							state=STATE_SELECT_AMOUNT;
+						pt.setText(resultMsg);
+						pt.popup();
+						clear();
+						state=STATE_SELECT_AMOUNT;
 					}
 				}
 			}
@@ -364,16 +364,6 @@ public class GameRecharge extends GameCanvas implements Runnable{
 		}
 	}
 	
-	/*public final void keyPressed(int keyCode) {
-		System.out.println("pressed keyCode:"+keyCode);
-		keyState.keyPressed(keyCode);
-	}
-	
-	public final void keyReleased(int keyCode) {
-		System.out.println("releaseed keyCode:"+keyCode);
-		keyState.keyReleased(keyCode);
-	}
-	*/
 	public void clear() {
 		resource.clear();
 	}
