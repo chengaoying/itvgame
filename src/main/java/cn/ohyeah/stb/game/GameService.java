@@ -7,6 +7,7 @@ import cn.ohyeah.itvgame.model.LoginInfo;
 import cn.ohyeah.itvgame.model.OwnProp;
 import cn.ohyeah.itvgame.model.Prop;
 import cn.ohyeah.itvgame.model.PurchaseRecord;
+import cn.ohyeah.itvgame.model.PurchaseStatis;
 import cn.ohyeah.itvgame.model.SubscribeRecord;
 import cn.ohyeah.itvgame.protocol.Constant;
 import cn.ohyeah.itvgame.service.AccountService;
@@ -180,19 +181,21 @@ public class GameService {
 		}
 	}
 	
-	public void purchaseProp(int propId, int propCount, String remark) {
+	public void purchaseProp(int propId, String remark) {
 		try {
 			PurchaseService purchaseService = new PurchaseService(server);
-			int	b = purchaseService.purchaseProp(paramManager.buyURL, paramManager.accountId, paramManager.accountName, 
-						paramManager.userToken, paramManager.productId, propId, propCount, remark, paramManager.checkKey);
+			/*int	b = purchaseService.purchaseProp(paramManager.buyURL, paramManager.accountId, paramManager.accountName, 
+						paramManager.userToken, paramManager.productId, propId, propCount, remark, paramManager.checkKey);*/
+			int b = purchaseService.expendTelcomsh(paramManager.buyURL, paramManager.userId, paramManager.userToken, 
+							paramManager.accountName, paramManager.accountId, paramManager.productId, propId, remark, paramManager.gameid);
 			result = purchaseService.getResult();
 			if (result == 0) {
-				if (b >= 0) {
-					ITVGame.balance -= b;
+				/*if (b >= 0) {
+					ITVGame.balance = b;
 				}
-				else {
-					ITVGame.balance += b;
-				}
+				else {*/
+					ITVGame.balance = b;
+				//}
 			}
 			else {
 				message = purchaseService.getMessage();
@@ -210,6 +213,24 @@ public class GameService {
 			PurchaseService purchaseService = new PurchaseService(server);
 			PurchaseRecord[] pr = purchaseService.queryPurchasePropRecord(paramManager.accountId, 
 					paramManager.productId, offset, length);
+			result = purchaseService.getResult();
+			if (result != 0) {
+				message = purchaseService.getMessage();
+			}
+			return pr;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			result = -1;
+			message = e.getMessage();
+			return null;
+		}
+	}
+	
+	public PurchaseStatis[] queryPurhcaseStatisList(int offset, int lenght, String sTime, String eTime){
+		try {
+			PurchaseService purchaseService = new PurchaseService(server);
+			PurchaseStatis[] pr = purchaseService.queryPurchaseStatisList(paramManager.productId, offset, lenght, sTime, eTime);
 			result = purchaseService.getResult();
 			if (result != 0) {
 				message = purchaseService.getMessage();
@@ -305,7 +326,7 @@ public class GameService {
 			
 			b = subscribeService.recharge(paramManager.buyURL, paramManager.accountId, paramManager.accountName, 
 					paramManager.userToken, paramManager.productId, amount,	ITVGame.getRechargeRatio(), 
-					remark, paramManager.checkKey, paramManager.spid, null);
+					remark, paramManager.checkKey, paramManager.spid, paramManager.gameid, null);
 			
 			result = subscribeService.getResult();
 			if (result == 0) {

@@ -43,7 +43,7 @@ public class DateUtil {
 		Calendar calendar = getDefaultCalendar();
 		calendar.setTime(time);
 		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
+		int month = calendar.get(Calendar.MONTH)+1;
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
@@ -54,6 +54,10 @@ public class DateUtil {
 		String hstr = (hour >= 10)?Integer.toString(hour):("0"+hour);
 		String minstr = (minute >= 10)?Integer.toString(minute):("0"+minute);
 		String sstr = (second >= 10)?Integer.toString(second):("0"+second);
+		
+		if(pattern==null || pattern.equals("")){
+			return year+""+mstr+""+dstr+""+hstr+""+minstr+""+sstr;
+		}
 		
 		if(pattern.equals(PATTERN_ONE)){
 			return year+"-"+mstr+"-"+dstr+" "+hstr+":"+minstr+":"+sstr;

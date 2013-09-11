@@ -3,6 +3,7 @@ package cn.ohyeah.itvgame.service;
 import java.io.IOException;
 
 import cn.ohyeah.itvgame.model.PurchaseRecord;
+import cn.ohyeah.itvgame.model.PurchaseStatis;
 import cn.ohyeah.itvgame.model.SubscribePayType;
 import cn.ohyeah.itvgame.protocol.Constant;
 
@@ -187,6 +188,42 @@ public final class PurchaseService extends AbstractHttpService{
 	}
 	
 	/**
+	 * 上海电信购买道具
+	 */
+	public int expendTelcomsh(String buyURL,String useId,String userToken,String accountName,int accountId,
+			int productId, int propId, String remark, String gameid) {
+		try {
+			int balance = -1;
+			initHead(Constant.PROTOCOL_TAG_PURCHASE, Constant.PURCHASE_CMD_EXPEND_TELCOMSH);
+			openBufferDataOutputStream();
+			bufferDos.writeInt(headWrapper.getHead());
+			bufferDos.writeUTF(buyURL);
+			bufferDos.writeInt(accountId);
+			bufferDos.writeUTF(accountName);
+			bufferDos.writeUTF(userToken);
+			bufferDos.writeInt(productId);
+			bufferDos.writeInt(propId);
+			bufferDos.writeInt(SubscribePayType.PAY_TYPE_BILL);
+			bufferDos.writeUTF(remark);
+			bufferDos.writeUTF(gameid);
+			byte[] data = bufferBaos.toByteArray();
+			closeBufferDataOutputStream();
+			
+			writeData(data);
+			checkHead();
+			if (readResult() == 0) {
+				balance = connectionDis.readInt();
+			}
+			return balance;
+		} catch (IOException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		finally {
+			close();
+		}
+	}
+	
+	/**
 	 * <pre>
 	 * 查询消费记录
 	 * 若查询最近的1~10条记录,offset=0, length=10
@@ -220,6 +257,42 @@ public final class PurchaseService extends AbstractHttpService{
 		    		purchaseList = new PurchaseRecord[num];
 			    	for (int i = 0; i < num; ++i) {
 			    		purchaseList[i] = new PurchaseRecord();
+			    		purchaseList[i].readQueryResponseData(connectionDis);
+			    	}
+		    	}
+		    }
+		} catch (IOException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		finally {
+			close();
+		}
+		return purchaseList;
+	}
+	
+	public PurchaseStatis[] queryPurchaseStatisList(int productId, int offset, int lenght, String sTime, String eTime){
+		PurchaseStatis[] purchaseList = null;
+		System.out.println("purchaseService");
+		try {
+			initHead(Constant.PROTOCOL_TAG_PURCHASE, Constant.PURCHASE_CMD_QUERY_PURCHASE_RANK);
+			openBufferDataOutputStream();
+			bufferDos.writeInt(headWrapper.getHead());
+			bufferDos.writeInt(productId);
+			bufferDos.writeInt(offset);
+			bufferDos.writeInt(lenght);
+			bufferDos.writeUTF(sTime);
+			bufferDos.writeUTF(eTime);
+			byte[] data = bufferBaos.toByteArray();
+			closeBufferDataOutputStream();
+			
+			writeData(data);
+			checkHead();
+		    if (readResult() == 0) {
+		    	int num = connectionDis.readShort();
+		    	if (num > 0) {
+		    		purchaseList = new PurchaseStatis[num];
+			    	for (int i = 0; i < num; ++i) {
+			    		purchaseList[i] = new PurchaseStatis();
 			    		purchaseList[i].readQueryResponseData(connectionDis);
 			    	}
 		    	}

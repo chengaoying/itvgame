@@ -9,7 +9,11 @@ import cn.ohyeah.itvgame.model.GameRanking;
 import cn.ohyeah.itvgame.model.GameRecord;
 import cn.ohyeah.itvgame.model.LoginInfo;
 import cn.ohyeah.itvgame.model.OwnProp;
+import cn.ohyeah.itvgame.model.Prop;
+import cn.ohyeah.itvgame.model.PurchaseRecord;
+import cn.ohyeah.itvgame.model.PurchaseStatis;
 import cn.ohyeah.itvgame.model.SubscribeProperties;
+import cn.ohyeah.itvgame.model.SubscribeRecord;
 import cn.ohyeah.itvgame.service.ServiceException;
 import cn.ohyeah.stb.key.KeyState;
 import cn.ohyeah.stb.util.DateUtil;
@@ -22,6 +26,7 @@ public class ITVGame {
 	private static String errorMessage;
 	private static boolean loginSuccessful;
 	private static String loginMessage;
+	private static Thread t;
 	
 	/*用户登录时间*/
 	private static Date loginTime;	
@@ -52,6 +57,7 @@ public class ITVGame {
 		pm.parse();		
 		gameService = new GameService(pm);
 		gameRecharge = new GameRecharge(pm,gameService);
+		t = new Thread(gameRecharge);
 		
 		/*用户登入*/
 		login();		
@@ -166,8 +172,64 @@ public class ITVGame {
 	}
 	
 	/**
-	 * 查询用户道具
+	 * 查询消费记录
+	 * @param offset 起始记录
+	 * @param length 记录条数
+	 * @return PurchaseRecord对象数组
+	 */
+	public static PurchaseRecord[] queryPurchaseRecordList(int offset, int length){
+		if(loginSuccessful){
+			return gameService.queryPurchaseRecord(offset, length);
+		}else{
+			throw new ServiceException("login fail");
+		}
+	}
+	
+	/**
+	 * 查询订购（充值）记录
+	 * @param offset
+	 * @param length
 	 * @return
+	 */
+	public static SubscribeRecord[] querySubscribeRecordList(int offset, int length){
+		if(loginSuccessful){
+			return gameService.querySubscribeRecord(offset, length);
+		}else{
+			throw new ServiceException("login fail");
+		}
+	}
+	
+	/**
+	 * 用户总消费排行列表
+	 * @param offset 起始记录
+	 * @param lenght 记录条数
+	 * @param sTime  (活动)开始时间，如："2013-09-09 00:00:00"
+	 * @param eTime  (活动)结束时间
+	 * @return
+	 */
+	public static PurchaseStatis[] queryPurhcaseStatisList(int offset, int lenght, String sTime, String eTime){
+		if(loginSuccessful){
+			return gameService.queryPurhcaseStatisList(offset, lenght, sTime, eTime);
+		}else{
+			throw new ServiceException("login fail");
+		}
+	}
+	
+	/**
+	 * 查询游戏中的道具
+	 * @return 道具列表
+	 */
+	public static Prop[] queryGameProp(){
+		if(loginSuccessful){
+			return gameService.queryGamePropList();
+		}else{
+			throw new ServiceException("login fail");
+		}
+	}
+	
+	/**
+	 * 查询用户购买的道具
+	 * @return 用户道具列表
 	 */
 	public static OwnProp[] queryOwnPropList(){
 		if(loginSuccessful){
@@ -183,12 +245,12 @@ public class ITVGame {
 	 * @param propCount 道具数量
 	 * @param remark  描述信息
 	 */
-	public static void purchaseProp(int propId, int propCount, String remark){
+	public static void purchaseProp(int propId, String remark){
 		if(loginSuccessful){
-			gameService.purchaseProp(propId, propCount, remark);
+			gameService.purchaseProp(propId, remark);
 		}else{
 			throw new ServiceException("login fail");
-		}
+		}  
 	}
 	
 	/**
@@ -221,7 +283,10 @@ public class ITVGame {
 	 * 带充值界面的充值
 	 */
 	public static void rechargeUI(){
-		new Thread(gameRecharge).start();
+		if(!t.isAlive()){
+			t.start();
+		}
+		//new Thread(gameRecharge).start();
 	}
 	
 	/**

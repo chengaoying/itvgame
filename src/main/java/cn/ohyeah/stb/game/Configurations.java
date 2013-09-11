@@ -19,6 +19,7 @@ public class Configurations {
 	
 	public static final String TAG_TELCOMSH = "telcomsh";			/*上海电信*/
 	public static final String TAG_OHYEAH = "ohyeah";				/*欧耶平台*/
+	public static final String USERID_SUFFIX = "@iptv2";			/*同账号后缀*/
 	
 	private static Configurations instance = new Configurations();
 	private static boolean success;

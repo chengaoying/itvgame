@@ -117,11 +117,15 @@ final class ParamManager {
 	private void parseOhyeahPlatParam() {
 		server = getStringParam("server");
 		userId = getStringParam("userId");
+		int index = userId.indexOf(Configurations.USERID_SUFFIX);
+		if(index>=0){
+			userId = userId.substring(0, index);
+		}
 		accountName = getStringParam("accountName");
 		userToken = getStringParam("userToken");
 		appName = getStringParam("appName");
 		buyURL = "";
-		gameid = "";
+		gameid = getStringParam("gameid");
 		spid = "";
 		checkKey = "";
 	}

@@ -161,13 +161,14 @@ public final class SubscribeService extends AbstractHttpService{
 	 * @throws ServiceException
 	 */
 	public int recharge(String buyURL, int accountId, String accountName, String userToken, 
-			int productId, int amount, int ratio, String remark, String checkKey, String spid, String password) {
+			int productId, int amount, int ratio, String remark, String checkKey, String spid, String gameid, String password) {
 		return recharge(buyURL, accountId, accountName, userToken, productId, amount, ratio, 
-				SubscribePayType.PAY_TYPE_BILL, remark, checkKey, spid, password);
+				SubscribePayType.PAY_TYPE_BILL, remark, checkKey, spid, gameid, password);
 	}
 	
 	public int recharge(String buyURL, int accountId, String accountName, String userToken, 
-			int productId, int amount, int ratio, int payType, String remark, String checkKey, String spid, String password) {
+			int productId, int amount, int ratio, int payType, String remark, String checkKey, String spid,
+			String gameid,String password) {
 		try {
 			int balance = -1;
 			initHead(Constant.PROTOCOL_TAG_SUBSCRIBE, Constant.SUBSCRIBE_CMD_RECHARGE);
@@ -184,6 +185,7 @@ public final class SubscribeService extends AbstractHttpService{
 			bufferDos.writeUTF(remark);
 			bufferDos.writeUTF(checkKey);
 			bufferDos.writeUTF(spid);
+			bufferDos.writeUTF(gameid);
 			if (password == null) {
 				bufferDos.writeUTF("");
 			}
